@@ -1,3 +1,0 @@
-StrictHostKeyChecking no
-ServerAliveInterval 100 
-SendEnv TERM
