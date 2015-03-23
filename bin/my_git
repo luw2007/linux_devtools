@@ -1,0 +1,20 @@
+#!/usr/bin/expect -f
+
+set password [lindex $argv 0]
+set cmd [lindex $argv 1]
+set origin [lindex $argv 2]
+set branch [lindex $argv 3]
+
+if {$argc <= 4} {
+  spawn git $cmd $origin $branch
+ 
+} else {
+  set option [lindex $argv 4]
+  spawn git $cmd $origin $branch $option
+  
+}
+expect {
+    "*assword:*"  {send "$password\r" }
+    }
+
+interact    

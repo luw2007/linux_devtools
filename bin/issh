@@ -1,0 +1,12 @@
+#!/bin/sh
+APP_PATH=${HOME}/bin/
+
+if [ $# -ge 1 ] ;then
+	my_ssh ` head -"$1" ${APP_PATH}password.log|tail -1`	
+else
+    echo $0 [server_id]
+	echo '## server info ##'
+    echo '# id:server info'
+	grep -vn "^#" ${APP_PATH}password.log|sed "s/^/# /g"
+	echo '## end ##'
+fi

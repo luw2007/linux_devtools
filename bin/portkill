@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function help(){
+    echo $0 用法: $0 [port]
+}
+function PORTKILL(){
+    sudo netstat -ntpl 2>/dev/null | egrep "^tcp  .*:$1[[:blank:]]"
+}
+
+if [ $# -ne 1  ]; then 
+    echo "need port number"
+    help
+    exit
+fi
+
+if [[ -n $(PORTKILL $1) ]];then
+    PORTKILL $1
+    echo "按下任意键 kill 以上进程; Ctrl+c 退出"
+    read
+    PORTKILL $1|awk '{print $7}'|cut -d / -f 1 |xargs sudo kill -9 
+else
+    echo 'nothing to do!'
+fi

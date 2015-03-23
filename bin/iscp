@@ -1,0 +1,25 @@
+#!/bin/sh
+APP_PATH=${HOME}/bin/
+
+function help(){
+    echo $0 "[src_path] [dest_path] [serverID]"
+
+    echo '## server info ##'
+    echo '# id:server info'
+    grep -vn "^#" ${APP_PATH}password.log|sed "s/^/# /g"
+    echo '## end ##'
+}
+
+if [ $# -ge 3 ] ;then
+	 src_path=$1
+	 dest_path=$2
+    if [ -f $src_path ];then 
+        my_scp $src_path $dest_path ` head -"$3" ${APP_PATH}password.log |tail -1`	
+    else
+        my_scp_get $src_path $dest_path ` head -"$3" ${APP_PATH}password.log |tail -1`
+    fi
+else
+    help
+fi
+
+

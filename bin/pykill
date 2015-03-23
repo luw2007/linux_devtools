@@ -1,0 +1,23 @@
+#!/bin/bash
+
+function help(){
+    echo $0 用法: $0 [pyfile]
+}
+function PYKILL(){
+    ps -ef | grep python | grep -v grep|egrep "python.*[^a-Z0-9A-Z_-]$1"
+}
+
+if [ $# -ne 1  ]; then 
+    echo "need pyfile name"
+    help
+    exit
+fi
+
+if [[ -n $(PYKILL $1) ]];then
+    PYKILL $1
+    echo "按下任意键 kill 以上进程; Ctrl+c 退出"
+    read
+    PYKILL $1 | awk '{print $2}'|xargs sudo kill -9 
+else
+    echo 'nothing to do!'
+fi

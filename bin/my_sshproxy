@@ -1,0 +1,11 @@
+#!/usr/bin/expect
+set timeout 60
+spawn /usr/bin/ssh -D 1087 -g -p 80 luw100g@178.18.19.196
+expect {
+"password:" {
+send "unamegor\r"
+}
+}
+interact {
+timeout 60 { send " "}
+}

@@ -1,0 +1,46 @@
+#!/bin/bash
+echo "args: 1 git cmd "
+echo "      2 path"
+echo 
+GIT_PASSWD=${HOME}/bin/git_passwd
+
+if [[ ! -f $GIT_PASSWD ]] ;then
+    echo GIT PASSWD FILE: $GIT_PASSWD do not exiest!
+    exit
+fi
+
+password=$(cat $GIT_PASSWD)
+if [[ -z "$password" ]];then
+    input you git password in $GIT_PASSWD
+    exit
+fi
+
+function gitCmd(){  
+    echo -e "\n\n## start `pwd`"
+    status=`git status 2>&1`
+    if [[ ! -z "`echo $status |grep modified`" ]]; then 
+        echo -e "#------------------------------#\n# there has modified.  #\n#------------------------------#"
+    elif [[ ! -z "`echo $status |grep 'fatal: Not a git repository (or any parent up to mount parent'`" ]]; then
+        echo -e "#------------------------------#\n# fatal, `pwd` not a git dir #\n#------------------------------#"
+    else
+        my_git $password $cmd origin master 2>/dev/null
+
+    fi
+}
+
+cmd=${1:-"pull"}
+DIR=${2:-"${HOME}/codes"}
+if [  -z ${2} -o -d ${2} ] ;then
+    for p in `ls $DIR` ; do   
+        if [ -d "$DIR/$p" ]; then        
+            cd $DIR/$p 
+            gitCmd
+            cd $DIR
+        fi
+    done
+
+else
+    cd $DIR
+    gitCmd 2
+
+fi

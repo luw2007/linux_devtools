@@ -1,0 +1,13 @@
+#!/bin/sh 
+
+function _get_down_cmd(){
+echo "\"pget -n ${2} '${1}' -o ${3}\""
+}
+if [[ $# -lt 1 ]]; then
+echo "need down_url"
+echo "$0 用法: $0 [OPTS] <down_url> [maxconn|number] [base|directory]"
+exit 1
+fi
+echo lftp -c `_get_down_cmd ${1} ${2:-10} ${3:-./}`
+_get_down_cmd ${1} ${2:-10} ${3:-./}|xargs lftp -c
+

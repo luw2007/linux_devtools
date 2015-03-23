@@ -1,0 +1,12 @@
+#!/bin/bash
+
+function cpufreq() {
+    sudo cpufreq-set -c ${1:-0} -g userspace -u 1200Mhz -d 800Mhz
+    sudo cpufreq-set -c ${1:-0} -f 800Mhz
+}
+
+cpufreq-info |grep -o "analyzing CPU[^:]*"|sed 's/analyzing CPU//g'|
+while read cpuid
+do 
+    cpufreq $cpuid
+done
